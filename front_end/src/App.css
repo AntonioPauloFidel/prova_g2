@@ -182,3 +182,23 @@
     border-right-color: var(--border);
   }
 }
+
+/* Cores Padrão - Tema Escuro (Dark) */
+body.dark {
+  --bg-dark: #0f172a;
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --text-main: #f1f5f9;
+  --text-muted: #94a3b8;
+  background-color: var(--bg-dark);
+}
+
+/* Cores Alternativas - Tema Claro (Light) */
+body.light {
+  --bg-dark: #f8fafc;
+  --glass-bg: rgba(15, 23, 42, 0.05);
+  --glass-border: rgba(15, 23, 42, 0.1);
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  background-color: var(--bg-dark);
+}
