@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../services/api';
+import { getPosts } from '../../services/postsService';
 import './Favorites.css';
 
 const Favorites = () => {
   const [posts, setPosts] = useState([]);
+  const [carregando, setCarregando] = useState(true);
 
   useEffect(() => {
     carregarFavoritos();
@@ -11,16 +12,21 @@ const Favorites = () => {
 
   const carregarFavoritos = async () => {
     try {
-      const { data } = await api.get('/posts/favorites');
-      setPosts(data.posts);
+      const todosPosts = await getPosts();
+      const apenasFavoritos = todosPosts.filter((post) => post.favorited_by_me);
+      setPosts(apenasFavoritos);
     } catch (err) {
       console.error("Erro ao carregar favoritos", err);
+    } finally {
+      setCarregando(false);
     }
   };
 
   return (
     <div className="favorites-container">
       <h1>❤️ Posts Favoritos</h1>
+
+      {carregando && <p>Carregando...</p>}
 
       <div className="favorites-list">
         {posts.map(post => (
@@ -31,6 +37,8 @@ const Favorites = () => {
           </div>
         ))}
       </div>
+
+      {!carregando && posts.length === 0 && <p>Você ainda não curtiu nenhum post.</p>}
     </div>
   );
 };
