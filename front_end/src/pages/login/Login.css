@@ -179,3 +179,12 @@
   color: var(--primary-hover);
   text-decoration: underline;
 }
+.link-button {
+  background: none;
+  border: none;
+  color: #1da1f2;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: inherit;
+  padding: 0;
+}
