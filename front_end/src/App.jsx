@@ -1,32 +1,48 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
-import Login from './pages/login/Login.jsx'; 
 import Home from './pages/home/Home.jsx';
+import Login from './pages/login/Login.jsx';
+import Favorites from './pages/favorites/Favorites.jsx';
+
+import ProtectedRoute from './routes/ProtectedRoute.jsx';
 
 import { ThemeProvider, useTheme } from './context/ThemeContext.jsx';
 import './App.css';
 
-// Esse componente roda isolado dentro do Provider para não quebrar o hook useTheme
 function MainContent() {
   const { theme, toggleTheme } = useTheme();
 
   return (
     <Router>
-      {/* Botão de alternar tema */}
       <button onClick={toggleTheme} className="theme-toggle-btn">
         {theme === 'light' ? '🌙 Noite' : '☀️ Dia'}
       </button>
 
       <Routes>
-        {/* Rota inicial abrindo o Login */}
-        <Route path="/" element={<Login />} />
-        
-        {/* Rota do Feed/Home */}
+
+        {/* 🔥 HOME COMO INICIAL */}
+        <Route path="/" element={<Home />} />
+
+        {/* login opcional */}
+        <Route path="/login" element={<Login />} />
+
+        {/* feed também aponta pra home (opcional) */}
         <Route path="/feed" element={<Home />} />
-        
-        {/* Fallback de segurança */}
+
+        {/* 🔒 FAVORITES PROTEGIDO */}
+        <Route
+          path="/favorites"
+          element={
+            <ProtectedRoute>
+              <Favorites />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* fallback */}
         <Route path="*" element={<Navigate to="/" />} />
+
       </Routes>
     </Router>
   );

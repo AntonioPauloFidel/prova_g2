@@ -35,41 +35,43 @@ export default function Home() {
   };
 
   const handleCriarPost = async (e) => {
-    e.preventDefault();
-    setErro('');
+        e.preventDefault();
+        setErro('');
 
-    try {
-      const response = await api.post('/posts', { content: novoPost });
-      setPosts([response.data.post, ...posts]);
-      setNovoPost('');
-    } catch (err) {
-      setErro(err.response?.data?.erro || 'Erro ao publicar.');
-    }
-  };
-
-  const handleCurtir = async (id) => {
-    if (!user) {
-      alert("Você precisa estar logado para curtir!");
-      return;
-    }
-
-    try {
-      const response = await api.post(`/posts/${id}/favorite`);
-      
-      setPosts(posts.map(post => {
-        if (post.id === id) {
-          return {
-            ...post,
-            favorited_by_me: response.data.favorited_by_me,
-            favorites_count: response.data.favorites_count
-          };
+        try {
+        const response = await api.post('/posts', { content: novoPost });
+        setPosts([response.data.post, ...posts]);
+        setNovoPost('');
+        } catch (err) {
+        setErro(err.response?.data?.erro || 'Erro ao publicar.');
         }
-        return post;
-      }));
-    } catch (err) {
-      console.error("Erro ao curtir", err);
+    };
+
+    const handleCurtir = async (id) => {
+    if (!user) {
+        alert("Você precisa estar logado para curtir!");
+        return;
     }
-  };
+
+    try {
+        const { data } = await api.post(`/posts/${id}/favorite`);
+
+        setPosts(prev =>
+        prev.map(post =>
+            post.id === id
+            ? {
+                ...post,
+                favorited_by_me: data.favorited_by_me,
+                favorites_count: data.favorites_count
+                }
+            : post
+        )
+        );
+
+    } catch (err) {
+        console.error("Erro ao curtir", err);
+    }
+    };
 
   const handleLogout = async () => {
     try {

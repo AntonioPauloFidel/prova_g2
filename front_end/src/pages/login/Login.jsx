@@ -14,10 +14,28 @@ export default function Login() {
     setErro('');
 
     try {
-      await authService.login(username, password);
-      navigate('/');
+      // 🔥 CORRETO: enviar objeto
+      const data = await authService.login({
+        username,
+        password,
+      });
+
+      // 🔥 se backend retorna token
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
+
+      // 🔥 se retorna usuário
+      localStorage.setItem('usuario', JSON.stringify(data.usuario));
+
+      // 🔥 redireciona para feed
+      navigate('/feed');
+
     } catch (err) {
-      setErro(err.response?.data?.erro || 'Usuário ou senha inválidos.');
+      setErro(
+        err.response?.data?.erro ||
+        'Usuário ou senha inválidos.'
+      );
     }
   };
 
@@ -36,10 +54,8 @@ export default function Login() {
 
         <form onSubmit={handleLogin}>
           <div className="input-group">
-            <label htmlFor="username">Usuário</label>
+            <label>Usuário</label>
             <input
-              type="text"
-              id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Ex: joao_silva"
@@ -48,10 +64,9 @@ export default function Login() {
           </div>
 
           <div className="input-group">
-            <label htmlFor="password">Senha</label>
+            <label>Senha</label>
             <input
               type="password"
-              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Sua senha"
