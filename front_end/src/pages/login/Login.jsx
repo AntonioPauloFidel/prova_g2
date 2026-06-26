@@ -14,22 +14,19 @@ export default function Login() {
     setErro('');
 
     try {
-      // 🔥 CORRETO: enviar objeto
       const data = await authService.login({
         username,
         password,
       });
 
-      // 🔥 se backend retorna token
       if (data.token) {
         localStorage.setItem('token', data.token);
       }
 
-      // 🔥 se retorna usuário
-      localStorage.setItem('usuario', JSON.stringify(data.usuario));
+      localStorage.setItem("usuario", JSON.stringify(data.usuario));
 
-      // 🔥 redireciona para feed
-      navigate('/feed');
+      // ✔ volta pra Home
+      navigate("/");
 
     } catch (err) {
       setErro(
@@ -58,7 +55,6 @@ export default function Login() {
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Ex: joao_silva"
               required
             />
           </div>
@@ -69,7 +65,6 @@ export default function Login() {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Sua senha"
               required
             />
           </div>
